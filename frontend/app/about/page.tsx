@@ -101,7 +101,7 @@ export default function AboutPage() {
           >
             {[
               ["👨‍💻", "Tanmay Borundiya", "Backend · RAG Pipeline"],
-              ["👩‍🎨", "Omkar More", "Frontend · UX Design"],
+              ["👑", "Omkar More", "Frontend · UX Design"],
               ["👨‍🔬", "Parth Biradar", "ML · FAISS Indexing"],
               ["👩‍⚕️", "Dr. Purva Thakare", "Mentor"],
             ].map(([icon, name, role]) => (
