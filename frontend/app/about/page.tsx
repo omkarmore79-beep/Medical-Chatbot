@@ -103,7 +103,7 @@ export default function AboutPage() {
               ["👨‍💻", "Tanmay Borundiya", "Backend · RAG Pipeline"],
               ["👑", "Omkar More", "Frontend · UX Design"],
               ["👨‍🔬", "Parth Biradar", "ML · FAISS Indexing"],
-              ["👩‍⚕️", "Dr. Purva Thakare", "Mentor"],
+              ["👩‍⚕️", "Dr. Purva D Thakare", "Mentor"],
             ].map(([icon, name, role]) => (
               <div
                 key={name}
