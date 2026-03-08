@@ -31,12 +31,19 @@ VS_INDIAN_MEDICINE = "vectorstore_indian_medicine"
 
 
 # ==============================
-# 3️⃣ Embeddings
+# 3️⃣ Embeddings (Lazy Load)
 # ==============================
 
-emb = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/all-MiniLM-L6-v2"
-)
+emb = None
+
+
+def get_embeddings():
+    global emb
+    if emb is None:
+        emb = HuggingFaceEmbeddings(
+            model_name="sentence-transformers/all-MiniLM-L6-v2"
+        )
+    return emb
 
 
 # ==============================
@@ -52,31 +59,33 @@ _db_indian = None
 def load_dbs():
     global _db_sym, _db_drug, _db_qa, _db_indian
 
-    if _db_sym is None:
+    current_emb = get_embeddings()
+
+    if _db_sym is None and os.path.exists(VS_SYMPTOMS):
         _db_sym = FAISS.load_local(
             VS_SYMPTOMS,
-            emb,
+            current_emb,
             allow_dangerous_deserialization=True
         )
 
-    if _db_drug is None:
+    if _db_drug is None and os.path.exists(VS_DRUGS):
         _db_drug = FAISS.load_local(
             VS_DRUGS,
-            emb,
+            current_emb,
             allow_dangerous_deserialization=True
         )
 
-    if _db_qa is None:
+    if _db_qa is None and os.path.exists(VS_MEDQA):
         _db_qa = FAISS.load_local(
             VS_MEDQA,
-            emb,
+            current_emb,
             allow_dangerous_deserialization=True
         )
 
-    if _db_indian is None:
+    if _db_indian is None and os.path.exists(VS_INDIAN_MEDICINE):
         _db_indian = FAISS.load_local(
             VS_INDIAN_MEDICINE,
-            emb,
+            current_emb,
             allow_dangerous_deserialization=True
         )
 
@@ -128,7 +137,6 @@ def _build_drug_terms():
         if len(g) >= 4:
             terms.add(g)
 
-        # Also index meaningful generic tokens for combination medicines.
         for tok in re.findall(r"[a-z]+", g):
             if len(tok) >= 5:
                 terms.add(tok)
@@ -232,18 +240,20 @@ def classify_query(query: str) -> str:
 # ==============================
 
 def retrieve_context(query: str, k: int = 4):
-
     domain = classify_query(query)
 
     if domain == "emergency":
         return emergency_response(), 0.99, "emergency"
 
     if domain == "drugs":
-        dbs = [_db_drug, _db_indian]
+        dbs = [db for db in [_db_drug, _db_indian] if db is not None]
     elif domain == "symptoms":
-        dbs = [_db_sym]
+        dbs = [db for db in [_db_sym] if db is not None]
     else:
-        dbs = [_db_qa]
+        dbs = [db for db in [_db_qa] if db is not None]
+
+    if not dbs:
+        return "", 0.0, domain
 
     all_results = []
 
@@ -283,7 +293,6 @@ def retrieve_context(query: str, k: int = 4):
 # ==============================
 
 def generate_answer(query: str, context: str) -> str:
-
     prompt = f"""
 You are a professional medical assistant AI.
 
@@ -321,12 +330,9 @@ Medical Context:
 # ==============================
 
 def get_answer(query: str) -> Dict:
-
     load_dbs()
 
-    # 🔥 NEW: Normalize brand names BEFORE classification
     normalized_query = normalize_brand_names(query)
-
     context, confidence, domain = retrieve_context(normalized_query)
 
     if domain == "emergency":
