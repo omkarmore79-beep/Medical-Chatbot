@@ -14,7 +14,7 @@ export default function HomePage() {
           <div className="hero-content">
             <div className="hero-badge">
               <span className="hero-badge-dot"></span>
-              Academic Research Project · 2024
+              Academic Research Project · 2026
             </div>
 
             <h1 className="hero-title">
