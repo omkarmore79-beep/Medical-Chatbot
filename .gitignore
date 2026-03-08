@@ -1,0 +1,33 @@
+# Frontend
+node_modules
+.next
+out
+.env*
+.vercel
+
+# Python / Backend
+Backend/venv
+Backend/.venv
+Backend/__pycache__/
+Backend/*.pyc
+Backend/.env
+Backend/.vscode/
+
+backend/venv
+backend/.venv
+backend/__pycache__/
+backend/*.pyc
+backend/.env
+backend/.vscode/
+
+# Large vectorstores
+Backend/vectorstore_indian_medicine/
+backend/vectorstore_indian_medicine/
+
+# Optional: ignore all vectorstores
+Backend/vectorstore_*/
+backend/vectorstore_*/
+
+# misc
+.DS_Store
+Thumbs.db
