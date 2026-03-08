@@ -100,10 +100,10 @@ export default function AboutPage() {
             }}
           >
             {[
-              ["👨‍💻", "Arjun Mehta", "Backend · RAG Pipeline"],
-              ["👩‍🎨", "Priya Singh", "Frontend · UX Design"],
-              ["👨‍🔬", "Karan Verma", "ML · FAISS Indexing"],
-              ["👩‍⚕️", "Dr. Nanda (Placeholder)", "Academic Supervisor"],
+              ["👨‍💻", "Tanmay Borundiya", "Backend · RAG Pipeline"],
+              ["👩‍🎨", "Omkar More", "Frontend · UX Design"],
+              ["👨‍🔬", "Parth Biradar", "ML · FAISS Indexing"],
+              ["👩‍⚕️", "Dr. Purva Thakare", "Mentor"],
             ].map(([icon, name, role]) => (
               <div
                 key={name}
