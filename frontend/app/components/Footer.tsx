@@ -89,7 +89,7 @@ export default function Footer() {
             physician or other qualified health provider with any questions you
             may have regarding a medical condition.
           </div>
-          <div className="footer-copy">© 2024 MedAssist AI · Academic Project</div>
+          <div className="footer-copy">© 2026 MedAssist AI · Academic Project</div>
         </div>
       </div>
     </footer>
